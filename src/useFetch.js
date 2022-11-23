@@ -6,7 +6,12 @@ const useFetch = (url) => {
     const [error,setError] = useState(null);
     useEffect(() =>{
         fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            if(!res.ok){
+                throw Error("Page not Found");
+            }
+            return res.json()
+        })
         .then(data => {
             setBlogs(data);
             setLoading(true);
