@@ -1,22 +1,13 @@
-import { useEffect, useState } from 'react';
 import {useParams,useHistory} from 'react-router-dom';
+import useFetch from './useFetch';
+
 const BlogDetails = () => {
-    
-    const [blog,setBlogs] = useState();
-    const [loading,setLoading] = useState(false);
 
     const {id} = useParams();
 
     const history = useHistory();
 
-    useEffect(() =>{
-        fetch('http://localhost:8000/blogs/'+id)
-        .then(res => res.json())
-        .then(data => {
-            setBlogs(data);
-            setLoading(true);
-        })
-    },[])
+    const {data:blog,loading,error} = useFetch('http://localhost:8000/blogs/'+id);
 
     const handeleDelete = (id) => {
         fetch('http://localhost:8000/blogs/'+id,{
@@ -29,6 +20,7 @@ const BlogDetails = () => {
 
     return ( 
         <>
+        {error && <h1>Something went wrong! Upss</h1>}
          {loading &&
              <div key={blog.id} className="p-[20px]">
                 <h1 className='font-bold text-2xl py-[20px]'>{blog.author}</h1>
